@@ -1,5 +1,9 @@
 {
   "mcpServers": {
+    "duckdb": {
+      "command": "uvx",
+      "args": ["mcp-server-duckdb", "--db-path", "~/knowledge-work-data/bio-research/bio-research.duckdb"]
+    },
     "pubmed": {
       "type": "http",
       "url": "https://pubmed.mcp.claude.com/mcp"

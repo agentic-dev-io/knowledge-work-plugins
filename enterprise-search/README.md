@@ -2,6 +2,8 @@
 
 An enterprise search plugin primarily designed for [Cowork](https://claude.com/product/cowork), Anthropic's agentic desktop application — though it also works in Claude Code. Search across all your company's tools in one place — email, chat, documents, and wikis — without switching between apps.
 
+**New**: This plugin now includes **DuckDB** integration for semantic and full-text search across enterprise content with vector similarity search and BM25 ranking for the most relevant results. See [DUCKDB.md](./DUCKDB.md) for details.
+
 ---
 
 ## How It Works

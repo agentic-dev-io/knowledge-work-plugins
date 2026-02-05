@@ -2,6 +2,8 @@
 
 A productivity plugin primarily designed for [Cowork](https://claude.com/product/cowork), Anthropic's agentic desktop application — though it also works in Claude Code. Task management, workplace memory, and a visual dashboard — Claude learns your people, projects, and terminology so it can act like a colleague, not a chatbot.
 
+**New**: This plugin now includes **DuckDB** integration for productivity analytics, task completion tracking, and calendar time analysis with semantic search for finding related tasks and meeting topics. See [DUCKDB.md](./DUCKDB.md) for details.
+
 ## Installation
 
 ```

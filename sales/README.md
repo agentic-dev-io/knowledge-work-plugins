@@ -2,6 +2,8 @@
 
 A sales productivity plugin primarily designed for [Cowork](https://claude.com/product/cowork), Anthropic's agentic desktop application — though it also works in Claude Code. Helps with prospecting, outreach, pipeline management, call preparation, and deal strategy. Works with any sales team — standalone with web search and your input, supercharged when you connect your CRM, email, and other tools.
 
+**New**: This plugin now includes **DuckDB** integration for sales pipeline analytics, deal tracking, and forecasting with similarity search for finding comparable deals and account relationship analysis. See [DUCKDB.md](./DUCKDB.md) for details.
+
 ## Installation
 
 ```bash

@@ -2,6 +2,8 @@
 
 A product management plugin primarily designed for [Cowork](https://claude.com/product/cowork), Anthropic's agentic desktop application — though it also works in Claude Code. Covers the full PM workflow: writing feature specs, managing roadmaps, communicating with stakeholders, synthesizing user research, analyzing competitors, and tracking product metrics.
 
+**New**: This plugin now includes **DuckDB** integration for product metrics tracking, feature adoption analysis, and user retention analytics with vector similarity search for finding related feature requests. See [DUCKDB.md](./DUCKDB.md) for details.
+
 ## Installation
 
 ```

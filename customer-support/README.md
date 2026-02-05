@@ -2,6 +2,8 @@
 
 A customer support plugin primarily designed for [Cowork](https://claude.com/product/cowork), Anthropic's agentic desktop application — though it also works in Claude Code. Provides ticket triage, escalation management, response drafting, customer research, and knowledge base authoring for support teams.
 
+**New**: This plugin now includes **DuckDB** integration for support ticket analytics, customer interaction tracking, and knowledge base management with full-text and semantic search capabilities for finding similar tickets and solutions. See [DUCKDB.md](./DUCKDB.md) for details.
+
 ## Installation
 
 ```

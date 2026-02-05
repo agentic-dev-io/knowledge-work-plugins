@@ -1,5 +1,9 @@
 {
   "mcpServers": {
+    "duckdb": {
+      "command": "uvx",
+      "args": ["mcp-server-duckdb", "--db-path", "~/knowledge-work-data/product-management/product-management.duckdb"]
+    },
     "slack": {
       "type": "http",
       "url": "https://mcp.slack.com/mcp"

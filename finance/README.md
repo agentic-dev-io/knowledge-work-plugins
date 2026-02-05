@@ -2,6 +2,8 @@
 
 A finance and accounting plugin primarily designed for [Cowork](https://claude.com/product/cowork), Anthropic's agentic desktop application — though it also works in Claude Code. Supports month-end close, journal entry preparation, account reconciliation, financial statement generation, variance analysis, and SOX audit support.
 
+**New**: This plugin now includes **DuckDB** integration for high-performance financial analytics, including support for Parquet files, vector similarity search, and full-text search. See [DUCKDB.md](./DUCKDB.md) for details.
+
 > **Important**: This plugin assists with finance and accounting workflows but does not provide financial, tax, or audit advice. All outputs should be reviewed by qualified financial professionals before use in financial reporting, regulatory filings, or audit documentation.
 
 ## Installation

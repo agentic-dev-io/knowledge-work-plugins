@@ -4,6 +4,8 @@ Connect to preclinical research tools and databases (literature search, genomics
 
 This plugin consolidates 10 MCP server integrations and 6 analysis skills into a single package for life science researchers.
 
+**New**: This plugin now includes **DuckDB** integration for high-performance genomics and research data analytics, including support for Parquet files (ideal for large datasets), vector similarity search (for research paper similarity and protein sequence analysis), and full-text search. See [DUCKDB.md](./DUCKDB.md) for details.
+
 ## What's Included
 
 ### MCP Servers (Data Sources & Tools)

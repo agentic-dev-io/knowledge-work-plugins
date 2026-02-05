@@ -1,5 +1,9 @@
 {
   "mcpServers": {
+    "duckdb": {
+      "command": "uvx",
+      "args": ["mcp-server-duckdb", "--db-path", "~/knowledge-work-data/finance/finance.duckdb"]
+    },
     "snowflake": {
       "type": "http",
       "url": ""

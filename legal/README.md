@@ -2,6 +2,8 @@
 
 An AI-powered productivity plugin for in-house legal teams, primarily designed for [Cowork](https://claude.com/product/cowork), Anthropic's agentic desktop application — though it also works in Claude Code. Automates contract review, NDA triage, compliance workflows, legal briefings, and templated responses -- all configurable to your organization's specific playbook and risk tolerances.
 
+**New**: This plugin now includes **DuckDB** integration for contract analysis, document management, and legal research with full-text search and vector similarity for finding similar contracts and clauses. See [DUCKDB.md](./DUCKDB.md) for details.
+
 > **Disclaimer:** This plugin assists with legal workflows but does not provide legal advice. Always verify conclusions with qualified legal professionals. AI-generated analysis should be reviewed by licensed attorneys before being relied upon for legal decisions.
 
 ## Target Personas

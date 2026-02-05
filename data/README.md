@@ -2,6 +2,8 @@
 
 A data analyst plugin primarily designed for [Cowork](https://claude.com/product/cowork), Anthropic's agentic desktop application — though it also works in Claude Code. SQL queries, data exploration, visualization, dashboards, and insight generation. Works with any data warehouse, any SQL dialect, and any analytics stack.
 
+**New**: This plugin now includes **DuckDB** as the primary analytical database with support for Parquet files, vector similarity search, JSON handling, and direct cloud storage access. DuckDB provides high-performance analytics on large datasets with seamless integration to Python/R. See [DUCKDB.md](./DUCKDB.md) for comprehensive usage examples.
+
 ## Installation
 
 ```

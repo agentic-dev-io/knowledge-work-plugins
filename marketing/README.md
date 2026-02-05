@@ -2,6 +2,8 @@
 
 A marketing plugin primarily designed for [Cowork](https://claude.com/product/cowork), Anthropic's agentic desktop application — though it also works in Claude Code. Content creation, campaign planning, brand voice management, competitive analysis, and performance reporting.
 
+**New**: This plugin now includes **DuckDB** integration for campaign analytics, attribution modeling, audience segmentation, and content performance tracking with similarity search for finding successful campaign patterns. See [DUCKDB.md](./DUCKDB.md) for details.
+
 ## Installation
 
 ```bash
