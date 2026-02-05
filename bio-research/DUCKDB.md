@@ -320,6 +320,194 @@ WHERE ABS(log2fc) > 1.5;
 COPY significant_genes TO 'results/significant_genes.parquet' (FORMAT PARQUET);
 ```
 
+## Recommended Additional Extensions (Priority P2/P3)
+
+### Scientific Data Formats
+
+#### Arrow Extension
+Apache Arrow for large biological datasets and zero-copy data exchange.
+
+```sql
+INSTALL arrow;
+LOAD arrow;
+
+-- Read Arrow format genomics data
+CREATE TABLE sequencing_data AS
+SELECT * FROM read_arrow('genomics/sequencing_results.arrow');
+
+-- Export to Arrow for Python/R analysis
+COPY (
+    SELECT gene_id, sample_id, expression_level, p_value
+    FROM differential_expression
+    WHERE p_value < 0.05
+) TO 'results/significant_genes.arrow' (FORMAT ARROW);
+
+-- Stream large datasets efficiently
+CREATE TABLE cell_atlas AS
+SELECT * FROM read_arrow_stream('single_cell/atlas_*.arrow');
+```
+
+#### HDF5 Extension
+Read scientific HDF5 data files.
+
+```sql
+INSTALL hdf5;
+LOAD hdf5;
+
+-- Read microscopy data
+SELECT * FROM read_hdf5('imaging/microscopy_data.h5', '/images/raw_data');
+
+-- Access proteomics data
+CREATE TABLE protein_abundance AS
+SELECT * FROM read_hdf5('proteomics/abundance_matrix.h5', '/data/normalized');
+
+-- Read flow cytometry data
+SELECT 
+    sample_id,
+    cell_count,
+    marker_expression
+FROM read_hdf5('flow_cytometry/experiment_001.h5', '/fcs_data');
+```
+
+#### Read_stat Extension
+Read SAS, Stata, and SPSS files from clinical studies.
+
+```sql
+INSTALL read_stat;
+LOAD read_stat;
+
+-- Read clinical trial data from SAS
+CREATE TABLE clinical_trial AS
+SELECT * FROM read_sas('clinical/trial_data.sas7bdat');
+
+-- Import Stata datasets
+CREATE TABLE patient_outcomes AS
+SELECT * FROM read_stata('studies/outcomes.dta');
+
+-- Load SPSS survey data
+CREATE TABLE survey_responses AS
+SELECT * FROM read_spss('surveys/patient_reported.sav');
+```
+
+### Statistical Analysis
+
+#### ANOFOX Statistics Extension
+Statistical analysis for biological data and clinical trials.
+
+```sql
+INSTALL anofox_statistics;
+LOAD anofox_statistics;
+
+-- T-test for differential expression
+SELECT 
+    gene_id,
+    AVG(CASE WHEN condition = 'treatment' THEN expression END) as treatment_mean,
+    AVG(CASE WHEN condition = 'control' THEN expression END) as control_mean,
+    t_test_2sample(
+        CASE WHEN condition = 'treatment' THEN expression END,
+        CASE WHEN condition = 'control' THEN expression END
+    ) as t_test_result,
+    t_test_pvalue(
+        CASE WHEN condition = 'treatment' THEN expression END,
+        CASE WHEN condition = 'control' THEN expression END
+    ) as p_value
+FROM gene_expression
+GROUP BY gene_id
+HAVING p_value < 0.05;
+
+-- Correlation matrix for biomarkers
+SELECT 
+    corr_matrix(['biomarker_1', 'biomarker_2', 'biomarker_3', 'outcome']) as correlation_matrix
+FROM clinical_data;
+
+-- ANOVA for multi-group comparison
+SELECT 
+    gene_id,
+    anova_f_statistic(expression, treatment_group) as f_stat,
+    anova_pvalue(expression, treatment_group) as p_value
+FROM multi_arm_study
+GROUP BY gene_id;
+```
+
+### Fast Lookups
+
+#### Marisa Extension
+Fast gene and protein name lookups using trie structures.
+
+```sql
+INSTALL marisa;
+LOAD marisa;
+
+-- Create trie for gene symbols
+CREATE MARISA TRIE gene_trie ON genes(gene_symbol);
+
+-- Fast gene symbol lookup
+SELECT gene_id, gene_symbol, chromosome, description
+FROM genes
+WHERE marisa_prefix_search(gene_symbol, 'BRCA');
+
+-- Protein name autocomplete
+CREATE MARISA TRIE protein_trie ON proteins(protein_name);
+
+SELECT protein_id, protein_name, function
+FROM proteins
+WHERE marisa_prefix_search(protein_name, $partial_name)
+ORDER BY protein_name;
+```
+
+### Cached API Access
+
+#### Cache HTTPFS Extension
+Cache PubMed and research API queries for faster repeated access.
+
+```sql
+INSTALL cache_httpfs;
+LOAD cache_httpfs;
+
+-- Enable caching for PubMed data
+SET cache_httpfs_enabled = true;
+SET cache_httpfs_dir = '~/bio-research-cache';
+SET cache_httpfs_ttl = 86400;  -- 24 hours
+
+-- Cached access to public genomics databases
+SELECT * FROM 's3://1000genomes/phase3/data/population_*.parquet';
+-- Subsequent queries use local cache
+
+-- Cache ChEMBL compound data
+CREATE TABLE chembl_cache AS
+SELECT * FROM 'https://ftp.ebi.ac.uk/pub/databases/chembl/compounds.parquet';
+```
+
+## Extension Priority Matrix
+
+| Priority | Extensions | Purpose |
+|----------|-----------|---------|
+| **P2 (Medium)** | arrow | Large biological datasets |
+| **P2 (Medium)** | hdf5 | Scientific data files |
+| **P2 (Medium)** | anofox_statistics | Statistical analysis |
+| **P3 (Nice-to-have)** | read_stat | Clinical study data (SAS/Stata/SPSS) |
+| **P3 (Nice-to-have)** | marisa | Fast gene/protein lookups |
+| **P3 (Nice-to-have)** | cache_httpfs | Cached API access |
+
+## Quick Start with Bio-Research Extensions
+
+```sql
+-- Install recommended extensions
+INSTALL arrow;
+INSTALL hdf5;
+INSTALL read_stat;
+INSTALL anofox_statistics;
+INSTALL marisa;
+INSTALL cache_httpfs;
+
+-- Load for current session
+LOAD arrow;
+LOAD hdf5;
+LOAD anofox_statistics;
+LOAD marisa;
+LOAD cache_httpfs;
+```
+
 ## Resources
 
 - [DuckDB Documentation](https://duckdb.org/docs/)

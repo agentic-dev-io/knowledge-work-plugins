@@ -171,6 +171,131 @@ Each plugin has detailed DuckDB documentation with use cases tailored to that do
 - [Legal Plugin](./legal/DUCKDB.md) - Contract analysis, document management
 - [Data Plugin](./data/DUCKDB.md) - Comprehensive data analytics guide
 
+## Extension Priority Matrix
+
+Extensions are prioritized based on impact and use case alignment:
+
+### Priority P0 (Critical) - Data & Finance Plugins
+
+| Extension | Plugins | Purpose |
+|-----------|---------|---------|
+| **snowflake** | data, finance | Direct connection to Snowflake data warehouse |
+| **bigquery** | data, finance | Connect to Google BigQuery |
+| **databricks** | data, finance | Connect to Databricks lakehouse |
+| **jsonata** | data, finance, product-management | Transform JSON data from APIs |
+| **anofox_statistics** | data, finance | Regression analysis & statistical tests |
+| **anofox_forecast** | data, finance | Time series forecasting |
+| **faiss** | data | High-performance vector similarity search |
+| **quackformers** | data | Transformer models & NLP in DuckDB |
+| **pivot_table** | data, finance, product-management | Dynamic pivots & cross-tabs |
+| **parser_tools** | data | SQL query parsing & optimization |
+| **dash** | data | Interactive dashboard components |
+| **miniplot** | data | ASCII/Unicode plots in results |
+
+### Priority P1 (High) - Sales, Support, Search Plugins
+
+| Extension | Plugins | Purpose |
+|-----------|---------|---------|
+| **rapidfuzz** | sales, customer-support, enterprise-search, marketing, legal | Fuzzy string matching & similarity |
+| **fuzzycomplete** | sales, customer-support, enterprise-search | Auto-complete with fuzzy matching |
+| **webbed** | sales, marketing, product-management, enterprise-search | XML/HTML parsing & web scraping |
+| **markdown** | marketing, customer-support, product-management, enterprise-search, legal | Markdown processing & generation |
+| **marisa** | sales, enterprise-search, bio-research | Fast trie-based string lookups |
+| **netquack** | sales | URI/Domain/IP parsing |
+| **splink_udfs** | customer-support | Probabilistic record linkage |
+| **tsid** | enterprise-search | Unique time-sorted IDs |
+
+### Priority P2 (Medium) - Workflow & Analytics
+
+| Extension | Plugins | Purpose |
+|-----------|---------|---------|
+| **yaml** | product-management, legal, productivity | Parse YAML configuration files |
+| **datasketches** | product-management, productivity | Approximate distinct counts (memory efficient) |
+| **minijinja / tera** | marketing | Text templating engines |
+| **encoding** | legal | Handle different text encodings |
+| **cache_httpfs** | finance, bio-research | Cached cloud storage access |
+
+### Priority P3 (Nice-to-have) - Scientific & Specialized
+
+| Extension | Plugins | Purpose |
+|-----------|---------|---------|
+| **arrow** | bio-research | Apache Arrow for large datasets |
+| **hdf5** | bio-research | Scientific HDF5 data files |
+| **read_stat** | bio-research | Read SAS/Stata/SPSS files |
+
+## Installation Priority by Plugin
+
+### Start Here (Highest Impact):
+
+**1. DATA Plugin** - Install first for maximum analytics capability
+```sql
+INSTALL snowflake, bigquery, databricks;
+INSTALL anofox_statistics, anofox_forecast;
+INSTALL faiss, quackformers;
+INSTALL pivot_table, parser_tools;
+INSTALL dash, miniplot;
+```
+
+**2. FINANCE Plugin** - Critical for financial workflows
+```sql
+INSTALL snowflake, bigquery, databricks;
+INSTALL anofox_statistics, anofox_forecast;
+INSTALL cache_httpfs, pivot_table;
+```
+
+### Next Priority (High Value):
+
+**3. SALES Plugin**
+```sql
+INSTALL webbed, netquack, jsonata;
+INSTALL fuzzycomplete, marisa;
+```
+
+**4. CUSTOMER-SUPPORT Plugin**
+```sql
+INSTALL rapidfuzz, splink_udfs;
+INSTALL markdown, jsonata, fuzzycomplete;
+```
+
+**5. ENTERPRISE-SEARCH Plugin**
+```sql
+INSTALL rapidfuzz, fuzzycomplete, marisa;
+INSTALL webbed, markdown, tsid;
+```
+
+### Follow-Up (Domain-Specific):
+
+**6. MARKETING Plugin**
+```sql
+INSTALL webbed, markdown, jsonata;
+INSTALL anofox_statistics, rapidfuzz;
+INSTALL minijinja;  -- or tera
+```
+
+**7. PRODUCT-MANAGEMENT Plugin**
+```sql
+INSTALL webbed, markdown, yaml, jsonata;
+INSTALL datasketches, pivot_table;
+```
+
+**8. BIO-RESEARCH Plugin**
+```sql
+INSTALL arrow, hdf5, read_stat;
+INSTALL anofox_statistics, marisa;
+INSTALL cache_httpfs;
+```
+
+**9. LEGAL Plugin**
+```sql
+INSTALL markdown, yaml, rapidfuzz;
+INSTALL encoding;
+```
+
+**10. PRODUCTIVITY Plugin**
+```sql
+INSTALL jsonata, yaml, datasketches;
+```
+
 ## Configuration
 
 DuckDB is configured in each plugin's `.mcp.json` file using the MCP server:

@@ -10,7 +10,11 @@ This plugin uses DuckDB as a high-performance analytical database for data scien
 ~/knowledge-work-data/data/data.duckdb
 ```
 
-## Key Extensions
+## Priority Extensions for Data Analytics
+
+This plugin is configured with **Priority P0 (Critical)** extensions for comprehensive data analytics workflows.
+
+## Core Extensions
 
 ### Parquet (Built-in)
 Native support for columnar storage and cloud data lakes.
@@ -258,6 +262,236 @@ DuckDB integrates seamlessly with:
 - **BI Tools**: Tableau, Power BI, Metabase via ODBC/JDBC
 - **Notebooks**: Jupyter, VS Code, DataSpell
 - **Cloud**: S3, GCS, Azure Blob Storage via httpfs
+
+## Recommended Additional Extensions (Priority P0)
+
+### Data Warehouse Connectors
+
+#### Snowflake Extension
+Direct queries to Snowflake data warehouse.
+
+```sql
+INSTALL snowflake;
+LOAD snowflake;
+
+-- Query Snowflake directly
+ATTACH 'snowflake://account.region/database' AS sf (TYPE snowflake);
+SELECT * FROM sf.schema.table LIMIT 100;
+```
+
+#### BigQuery Extension
+Connect to Google BigQuery for cloud data warehouse queries.
+
+```sql
+INSTALL bigquery;
+LOAD bigquery;
+
+-- Query BigQuery
+ATTACH 'bigquery://project-id' AS bq (TYPE bigquery);
+SELECT * FROM bq.dataset.table WHERE date >= '2024-01-01';
+```
+
+#### Databricks Extension
+Connect to Databricks lakehouse platform.
+
+```sql
+INSTALL databricks;
+LOAD databricks;
+
+-- Query Databricks
+ATTACH 'databricks://workspace-url/catalog' AS databricks;
+SELECT * FROM databricks.schema.table;
+```
+
+### Advanced Analytics Extensions
+
+#### ANOFOX Statistics Extension
+Statistical analysis including regression and correlation.
+
+```sql
+INSTALL anofox_statistics;
+LOAD anofox_statistics;
+
+-- Linear regression
+SELECT linregr_slope(y, x) as slope,
+       linregr_intercept(y, x) as intercept,
+       linregr_r2(y, x) as r_squared
+FROM dataset;
+
+-- Multiple correlation analysis
+SELECT corr_matrix(['col1', 'col2', 'col3', 'col4'])
+FROM dataset;
+```
+
+#### ANOFOX Forecast Extension
+Time series forecasting and trend analysis.
+
+```sql
+INSTALL anofox_forecast;
+LOAD anofox_forecast;
+
+-- Exponential smoothing forecast
+SELECT date,
+       actual_value,
+       exponential_smoothing(actual_value, 0.3) OVER (ORDER BY date) as forecast
+FROM time_series;
+
+-- ARIMA forecasting
+SELECT arima_forecast(value, 30) as forecast_30_days
+FROM daily_metrics
+WHERE date >= CURRENT_DATE - INTERVAL 90 DAY;
+```
+
+### Vector Search Extensions
+
+#### FAISS Extension
+High-performance vector similarity search for large-scale embeddings.
+
+```sql
+INSTALL faiss;
+LOAD faiss;
+
+-- Create FAISS index for massive embeddings
+CREATE FAISS INDEX ON embeddings_table(embedding_column)
+WITH (index_type = 'IVF', nlist = 100);
+
+-- Fast similarity search
+SELECT id, embedding_cosine_distance(embedding, $query_vector) as distance
+FROM embeddings_table
+WHERE faiss_search(embedding, $query_vector, 100);
+```
+
+#### Quackformers Extension
+Transformer models and NLP directly in DuckDB.
+
+```sql
+INSTALL quackformers;
+LOAD quackformers;
+
+-- Generate embeddings from text
+SELECT id, text,
+       sentence_embedding(text, 'all-MiniLM-L6-v2') as embedding
+FROM documents;
+
+-- Sentiment analysis
+SELECT review_text,
+       sentiment_analysis(review_text) as sentiment_score
+FROM customer_reviews;
+```
+
+### Visualization & Analysis
+
+#### Dash Extension
+Interactive dashboard components.
+
+```sql
+INSTALL dash;
+LOAD dash;
+
+-- Create dashboard data
+SELECT date,
+       sum(revenue) as revenue,
+       count(distinct user_id) as users,
+       dash_sparkline(revenue) OVER (ORDER BY date ROWS BETWEEN 6 PRECEDING AND CURRENT ROW) as trend
+FROM events
+GROUP BY date;
+```
+
+#### Miniplot Extension
+ASCII/Unicode plots in query results.
+
+```sql
+INSTALL miniplot;
+LOAD miniplot;
+
+-- Generate histogram in results
+SELECT value_bucket,
+       count(*) as frequency,
+       bar(count(*), 50) as distribution
+FROM (
+    SELECT width_bucket(value, 0, 100, 10) as value_bucket
+    FROM measurements
+)
+GROUP BY value_bucket
+ORDER BY value_bucket;
+```
+
+#### Pivot Table Extension
+Dynamic pivot operations.
+
+```sql
+INSTALL pivot_table;
+LOAD pivot_table;
+
+-- Dynamic pivot
+PIVOT sales_data 
+ON product 
+USING sum(revenue) as total_revenue
+GROUP BY region, quarter;
+
+-- Multi-level pivot
+PIVOT (
+    SELECT region, category, product, sum(sales) as total
+    FROM sales
+    GROUP BY region, category, product
+) ON (category, product)
+GROUP BY region;
+```
+
+### SQL Analysis
+
+#### Parser Tools Extension
+SQL query parsing, analysis, and optimization.
+
+```sql
+INSTALL parser_tools;
+LOAD parser_tools;
+
+-- Parse SQL query
+SELECT parse_sql('SELECT * FROM table WHERE x > 10') as parsed_ast;
+
+-- Analyze query complexity
+SELECT query_complexity_score($your_query) as complexity,
+       query_tables($your_query) as tables_used,
+       query_columns($your_query) as columns_accessed;
+
+-- Suggest query optimizations
+SELECT optimize_query($your_query) as optimized_sql;
+```
+
+## Extension Priority Matrix
+
+| Priority | Extensions | Purpose |
+|----------|-----------|---------|
+| **P0 (Critical)** | snowflake, bigquery, databricks | Data warehouse connectivity |
+| **P0 (Critical)** | anofox_statistics, anofox_forecast | Advanced analytics & forecasting |
+| **P0 (Critical)** | faiss, quackformers | Vector search & NLP |
+| **P1 (High)** | dash, miniplot, pivot_table | Visualization & exploration |
+| **P1 (High)** | parser_tools | SQL analysis & optimization |
+
+## Quick Start with Extensions
+
+```sql
+-- Install all priority extensions
+INSTALL snowflake;
+INSTALL bigquery;
+INSTALL databricks;
+INSTALL anofox_statistics;
+INSTALL anofox_forecast;
+INSTALL faiss;
+INSTALL quackformers;
+INSTALL dash;
+INSTALL miniplot;
+INSTALL pivot_table;
+INSTALL parser_tools;
+
+-- Load extensions for current session
+LOAD snowflake;
+LOAD bigquery;
+LOAD anofox_statistics;
+LOAD anofox_forecast;
+LOAD faiss;
+```
 
 ## Resources
 

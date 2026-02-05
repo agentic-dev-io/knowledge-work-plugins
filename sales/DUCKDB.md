@@ -141,6 +141,164 @@ FROM forecast_vs_actual
 ORDER BY forecast_month DESC;
 ```
 
+## Recommended Additional Extensions (Priority P1/P2)
+
+### Web Research & Prospecting
+
+#### Webbed Extension
+Web scraping for prospect and company research.
+
+```sql
+INSTALL webbed;
+LOAD webbed;
+
+-- Extract company information from websites
+SELECT 
+    company_url,
+    xpath(html_content, '//meta[@property="og:description"]/@content') as company_description,
+    xpath(html_content, '//div[@class="team-size"]') as employee_count
+FROM prospect_websites;
+
+-- Parse LinkedIn company pages
+SELECT 
+    linkedin_url,
+    extract_json_ld(html) as structured_data,
+    xpath(html, '//span[@class="company-industry"]') as industry
+FROM linkedin_research;
+```
+
+#### Netquack Extension
+URI/Domain/IP parsing for lead enrichment.
+
+```sql
+INSTALL netquack;
+LOAD netquack;
+
+-- Parse and enrich email domains
+SELECT 
+    email,
+    extract_domain(email) as company_domain,
+    domain_to_company_name(extract_domain(email)) as likely_company,
+    is_corporate_email(email) as is_business_email
+FROM leads;
+
+-- Analyze prospect website URLs
+SELECT 
+    url,
+    parse_url(url).host as domain,
+    parse_url(url).path as page_path,
+    classify_domain(parse_url(url).host) as domain_type
+FROM prospect_interactions;
+```
+
+### Data Processing
+
+#### JSONata Extension
+Transform CRM API data and enrich lead information.
+
+```sql
+INSTALL jsonata;
+LOAD jsonata;
+
+-- Transform CRM contact data
+SELECT 
+    contact_id,
+    jsonata_transform(crm_data,
+        '{ "name": firstName & " " & lastName, 
+           "company": account.name,
+           "score": leadScore + accountScore }') as enriched_contact
+FROM crm_contacts;
+
+-- Parse ZoomInfo API responses
+SELECT 
+    jsonata_transform(api_response,
+        'contacts[].{ 
+            "name": name, 
+            "title": title, 
+            "phone": phones[type="work"][0].number,
+            "seniority": $seniority_level(title)
+        }') as processed_contacts
+FROM zoominfo_results;
+```
+
+### Fuzzy Matching & Deduplication
+
+#### Fuzzycomplete Extension
+Fuzzy matching for lead deduplication and account matching.
+
+```sql
+INSTALL fuzzycomplete;
+LOAD fuzzycomplete;
+
+-- Deduplicate leads with fuzzy matching
+SELECT 
+    l1.lead_id,
+    l1.company_name,
+    l2.lead_id as potential_duplicate,
+    fuzzy_match_score(l1.company_name, l2.company_name) as similarity
+FROM leads l1, leads l2
+WHERE l1.lead_id < l2.lead_id
+  AND fuzzy_match_score(l1.company_name, l2.company_name) > 0.85;
+
+-- Auto-complete for account search
+SELECT 
+    account_name,
+    fuzzy_autocomplete(account_name, $search_term) as match_score
+FROM accounts
+WHERE fuzzy_autocomplete(account_name, $search_term) > 0.7
+ORDER BY match_score DESC
+LIMIT 10;
+```
+
+#### Marisa Extension
+Fast trie-based lookups for contact and account history.
+
+```sql
+INSTALL marisa;
+LOAD marisa;
+
+-- Fast prefix search for contacts
+CREATE MARISA TRIE contact_trie ON contacts(full_name);
+
+SELECT * FROM contacts
+WHERE marisa_prefix_search(full_name, 'John');
+
+-- Quick account lookup by name prefix
+CREATE MARISA TRIE account_trie ON accounts(account_name);
+
+SELECT account_id, account_name, annual_revenue
+FROM accounts
+WHERE marisa_prefix_search(account_name, $partial_name)
+ORDER BY annual_revenue DESC;
+```
+
+## Extension Priority Matrix
+
+| Priority | Extensions | Purpose |
+|----------|-----------|---------|
+| **P1 (High)** | webbed | Company & prospect research |
+| **P1 (High)** | jsonata | CRM data transformation |
+| **P1 (High)** | fuzzycomplete | Lead deduplication |
+| **P2 (Medium)** | netquack | Email/domain parsing |
+| **P2 (Medium)** | marisa | Fast contact/account lookups |
+
+## Quick Start with Sales Extensions
+
+```sql
+-- Install recommended extensions
+INSTALL webbed;
+INSTALL netquack;
+INSTALL jsonata;
+INSTALL fuzzycomplete;
+INSTALL marisa;
+
+-- Load for current session
+LOAD webbed;
+LOAD jsonata;
+LOAD fuzzycomplete;
+LOAD marisa;
+```
+
 ## Resources
 
 - [DuckDB Window Functions](https://duckdb.org/docs/sql/window_functions)

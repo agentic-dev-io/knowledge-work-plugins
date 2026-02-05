@@ -121,6 +121,173 @@ GROUP BY sprint_name
 ORDER BY sprint_name;
 ```
 
+## Recommended Additional Extensions (Priority P1/P2)
+
+### Web & Content Processing
+
+#### Webbed Extension
+XML/HTML processing for competitor research and web scraping.
+
+```sql
+INSTALL webbed;
+LOAD webbed;
+
+-- Parse competitor product pages
+SELECT 
+    url,
+    xpath(html_content, '//h1[@class="product-title"]') as product_name,
+    xpath(html_content, '//div[@class="features"]/ul/li') as features
+FROM competitor_pages;
+
+-- Extract pricing from web data
+SELECT 
+    competitor,
+    cast(xpath(html, '//span[@class="price"]')[1] as DECIMAL) as price
+FROM scraped_pricing;
+```
+
+#### Markdown Extension
+Process and generate product specs in Markdown format.
+
+```sql
+INSTALL markdown;
+LOAD markdown;
+
+-- Generate spec documentation
+SELECT 
+    feature_id,
+    feature_name,
+    markdown_to_html(spec_content) as html_spec,
+    markdown_toc(spec_content) as table_of_contents
+FROM feature_specs;
+
+-- Parse markdown PRDs
+SELECT 
+    prd_id,
+    extract_headers(markdown_content, 2) as h2_sections,
+    extract_code_blocks(markdown_content) as code_examples
+FROM product_requirements;
+```
+
+### Data Transformation
+
+#### YAML Extension
+Parse roadmap configurations and workflow definitions.
+
+```sql
+INSTALL yaml;
+LOAD yaml;
+
+-- Parse roadmap YAML config
+SELECT 
+    yaml_extract(roadmap_config, '$.quarters[*].themes') as quarterly_themes,
+    yaml_extract(roadmap_config, '$.priorities') as priorities
+FROM roadmap_definitions;
+
+-- Load feature flag configurations
+SELECT 
+    feature_name,
+    yaml_extract(config, '$.enabled') as is_enabled,
+    yaml_extract(config, '$.rollout_percentage') as rollout_pct
+FROM feature_flags;
+```
+
+#### JSONata Extension
+Transform JSON data from research tools and analytics platforms.
+
+```sql
+INSTALL jsonata;
+LOAD jsonata;
+
+-- Transform user research data
+SELECT 
+    jsonata_transform(interview_data, 
+        '{ "user": user_id, "insights": feedback[sentiment="positive"].text }') as processed
+FROM user_interviews;
+
+-- Aggregate feature requests from multiple tools
+SELECT 
+    jsonata_transform(api_response,
+        'requests[].{ "id": id, "votes": votes, "priority": $priority(votes) }') as normalized
+FROM external_feedback;
+```
+
+### Analytics Extensions
+
+#### DataSketches Extension
+Approximate distinct counts for user metrics and feature usage.
+
+```sql
+INSTALL datasketches;
+LOAD datasketches;
+
+-- Approximate unique users per feature (memory efficient)
+SELECT 
+    feature_id,
+    theta_sketch_distinct(user_id) as approx_unique_users,
+    theta_sketch_union(user_id) OVER (PARTITION BY product_area) as area_total_users
+FROM feature_usage
+GROUP BY feature_id;
+
+-- HyperLogLog for large-scale cardinality
+SELECT 
+    date,
+    hll_sketch_count(distinct user_id) as daily_active_users
+FROM events
+GROUP BY date;
+```
+
+#### Pivot Table Extension
+Roadmap prioritization and feature analysis matrices.
+
+```sql
+INSTALL pivot_table;
+LOAD pivot_table;
+
+-- Feature priority matrix
+PIVOT feature_requests
+ON (impact, effort)
+USING count(*) as request_count
+GROUP BY product_area;
+
+-- Roadmap timeline pivot
+PIVOT (
+    SELECT quarter, team, feature, status
+    FROM roadmap
+) ON team
+USING count(feature) as feature_count
+GROUP BY quarter, status;
+```
+
+## Extension Priority Matrix
+
+| Priority | Extensions | Purpose |
+|----------|-----------|---------|
+| **P1 (High)** | webbed | Competitor research & web scraping |
+| **P1 (High)** | markdown | Spec documentation |
+| **P1 (High)** | jsonata | Transform research tool data |
+| **P2 (Medium)** | yaml | Roadmap & workflow configuration |
+| **P2 (Medium)** | datasketches | Approximate user metrics |
+| **P2 (Medium)** | pivot_table | Roadmap analysis matrices |
+
+## Quick Start with Product Management Extensions
+
+```sql
+-- Install recommended extensions
+INSTALL webbed;
+INSTALL markdown;
+INSTALL yaml;
+INSTALL jsonata;
+INSTALL datasketches;
+INSTALL pivot_table;
+
+-- Load for current session
+LOAD webbed;
+LOAD markdown;
+LOAD jsonata;
+LOAD datasketches;
+```
+
 ## Resources
 
 - [DuckDB Documentation](https://duckdb.org/docs/)

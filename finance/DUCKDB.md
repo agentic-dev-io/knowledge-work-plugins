@@ -226,6 +226,177 @@ This makes DuckDB an excellent choice for:
 - Financial reconciliation
 - Audit trail analysis
 
+## Recommended Additional Extensions (Priority P0/P1)
+
+### Data Warehouse Connectors
+
+#### Snowflake Extension
+Direct connection to Snowflake for financial data.
+
+```sql
+INSTALL snowflake;
+LOAD snowflake;
+
+-- Connect to Snowflake data warehouse
+ATTACH 'snowflake://account.region/finance_db' AS sf (TYPE snowflake);
+
+-- Query GL data
+SELECT account_code, sum(amount) as balance
+FROM sf.accounting.general_ledger
+WHERE period = '2024-01'
+GROUP BY account_code;
+```
+
+#### BigQuery Extension
+Connect to Google BigQuery for cloud financial data.
+
+```sql
+INSTALL bigquery;
+LOAD bigquery;
+
+-- Query financial data from BigQuery
+ATTACH 'bigquery://finance-project' AS bq (TYPE bigquery);
+
+SELECT transaction_date, sum(amount) as daily_total
+FROM bq.finance.transactions
+WHERE transaction_date >= '2024-01-01'
+GROUP BY transaction_date;
+```
+
+#### Databricks Extension
+Connect to Databricks for lakehouse-based financial analytics.
+
+```sql
+INSTALL databricks;
+LOAD databricks;
+
+-- Access financial lakehouse
+ATTACH 'databricks://workspace/finance_catalog' AS databricks;
+
+SELECT * FROM databricks.accounting.trial_balance
+WHERE fiscal_year = 2024;
+```
+
+### Financial Analytics Extensions
+
+#### ANOFOX Statistics Extension
+Advanced variance analysis and regression for financial modeling.
+
+```sql
+INSTALL anofox_statistics;
+LOAD anofox_statistics;
+
+-- Variance decomposition with statistical significance
+SELECT 
+    account,
+    actual,
+    budget,
+    actual - budget as variance,
+    t_test(actual, budget) as statistical_significance,
+    correlation(actual, LAG(actual, 12) OVER (ORDER BY period)) as year_over_year_corr
+FROM monthly_actuals
+GROUP BY account;
+
+-- Regression analysis for expense forecasting
+SELECT 
+    linregr_slope(expense, revenue) as expense_ratio,
+    linregr_r2(expense, revenue) as model_fit
+FROM historical_financials;
+```
+
+#### ANOFOX Forecast Extension
+Time series forecasting for financial projections.
+
+```sql
+INSTALL anofox_forecast;
+LOAD anofox_forecast;
+
+-- Revenue forecasting
+SELECT 
+    period,
+    actual_revenue,
+    exponential_smoothing(actual_revenue, 0.3) OVER (ORDER BY period) as smoothed,
+    arima_forecast(actual_revenue, 12) OVER (ORDER BY period) as forecast_12mo
+FROM monthly_revenue
+WHERE period >= '2023-01-01';
+
+-- Cash flow forecasting
+SELECT 
+    date,
+    cash_balance,
+    moving_average(cash_balance, 7) OVER (ORDER BY date) as ma_7day,
+    holt_winters_forecast(cash_balance, 30) as forecast_30day
+FROM daily_cash_position;
+```
+
+#### Cache HTTPFS Extension
+Cached access to cloud financial data for faster report generation.
+
+```sql
+INSTALL cache_httpfs;
+LOAD cache_httpfs;
+
+-- Enable caching for frequent report queries
+SET cache_httpfs_enabled = true;
+SET cache_httpfs_dir = '~/finance-cache';
+
+-- Cached S3 access for month-end reports
+SELECT * FROM 's3://finance-data/month-end-reports/2024-*.parquet';
+-- Subsequent queries use cache
+```
+
+#### Pivot Table Extension
+Dynamic financial statement pivots and cross-tabulations.
+
+```sql
+INSTALL pivot_table;
+LOAD pivot_table;
+
+-- Dynamic P&L by department
+PIVOT monthly_expenses
+ON department
+USING sum(amount) as total_expense
+GROUP BY account, month
+ORDER BY account, month;
+
+-- Multi-dimensional financial cube
+PIVOT (
+    SELECT entity, department, account, period, sum(amount) as total
+    FROM consolidated_financials
+    GROUP BY entity, department, account, period
+) ON (department, account)
+GROUP BY entity, period;
+```
+
+## Extension Priority Matrix
+
+| Priority | Extensions | Purpose |
+|----------|-----------|---------|
+| **P0 (Critical)** | snowflake, bigquery, databricks | Connect to financial data warehouses |
+| **P0 (Critical)** | anofox_statistics | Variance analysis & regression |
+| **P1 (High)** | anofox_forecast | Financial forecasting & projections |
+| **P1 (High)** | cache_httpfs | Fast cached access to cloud data |
+| **P1 (High)** | pivot_table | Dynamic financial pivots |
+
+## Quick Start with Finance Extensions
+
+```sql
+-- Install all recommended extensions
+INSTALL snowflake;
+INSTALL bigquery;
+INSTALL databricks;
+INSTALL anofox_statistics;
+INSTALL anofox_forecast;
+INSTALL cache_httpfs;
+INSTALL pivot_table;
+
+-- Load for current session
+LOAD snowflake;
+LOAD anofox_statistics;
+LOAD anofox_forecast;
+LOAD pivot_table;
+```
+
 ## Resources
 
 - [DuckDB Documentation](https://duckdb.org/docs/)
