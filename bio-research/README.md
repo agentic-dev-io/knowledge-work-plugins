@@ -56,7 +56,7 @@ Systematic framework for research problem selection based on Fischbach & Walsh's
 
 ```bash
 # Install the plugin
-/install anthropics/knowledge-work-plugins bio-research
+/install agentic-dev-io/knowledge-work-plugins bio-research
 
 # Run the start command to see available tools
 /start

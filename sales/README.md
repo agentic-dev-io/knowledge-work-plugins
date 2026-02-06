@@ -7,7 +7,7 @@ A sales productivity plugin primarily designed for [Cowork](https://claude.com/p
 ## Installation
 
 ```bash
-claude plugins add knowledge-work-plugins/sales
+claude plugins add agentic-work-plugins/sales
 ```
 
 ## Commands

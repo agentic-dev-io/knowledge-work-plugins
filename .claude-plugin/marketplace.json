@@ -1,7 +1,7 @@
 {
-  "name": "knowledge-work-plugins",
+  "name": "agentic-work-plugins",
   "owner": {
-    "name": "Anthropic"
+    "name": "agentic-dev-io"
   },
   "plugins": [
     {

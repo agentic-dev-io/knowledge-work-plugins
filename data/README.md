@@ -7,7 +7,7 @@ A data analyst plugin primarily designed for [Cowork](https://claude.com/product
 ## Installation
 
 ```
-claude plugins add knowledge-work-plugins/data
+claude plugins add agentic-work-plugins/data
 ```
 
 ## What It Does

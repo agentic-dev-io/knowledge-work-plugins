@@ -7,7 +7,7 @@ A productivity plugin primarily designed for [Cowork](https://claude.com/product
 ## Installation
 
 ```
-claude plugins add knowledge-work-plugins/productivity
+claude plugins add agentic-work-plugins/productivity
 ```
 
 ## What It Does

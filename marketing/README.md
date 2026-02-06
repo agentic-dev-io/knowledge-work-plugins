@@ -7,7 +7,7 @@ A marketing plugin primarily designed for [Cowork](https://claude.com/product/co
 ## Installation
 
 ```bash
-claude plugins add knowledge-work-plugins/marketing
+claude plugins add agentic-work-plugins/marketing
 ```
 
 ## Commands

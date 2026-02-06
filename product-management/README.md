@@ -7,7 +7,7 @@ A product management plugin primarily designed for [Cowork](https://claude.com/p
 ## Installation
 
 ```
-claude plugins add knowledge-work-plugins/product-management
+claude plugins add agentic-work-plugins/product-management
 ```
 
 ## What It Does
