@@ -16,7 +16,7 @@ Display this welcome message:
 Bio-Research Plugin
 
 Your AI-powered research assistant for the life sciences. This plugin brings
-together literature search, data analysis pipelines, clinical trial tools,
+together literature search, data analysis pipelines,
 and scientific strategy — all in one place.
 ```
 
@@ -51,7 +51,6 @@ List the analysis skills available in this plugin:
 | **Single-Cell RNA QC** | Quality control for scRNA-seq data with MAD-based filtering |
 | **scvi-tools** | Deep learning for single-cell omics (scVI, scANVI, totalVI, PeakVI, etc.) |
 | **Nextflow Pipelines** | Run nf-core pipelines (RNA-seq, WGS/WES, ATAC-seq) |
-| **Clinical Trial Protocol** | Generate FDA/NIH-compliant clinical trial protocols |
 | **Instrument Data Converter** | Convert lab instrument output to Allotrope ASM format |
 | **Scientific Problem Selection** | Systematic framework for choosing research problems |
 
@@ -73,8 +72,7 @@ Ask the researcher what they're working on today. Suggest starting points based 
 1. **Literature review** — "Search ~~literature database for recent papers on [topic]"
 2. **Analyze sequencing data** — "Run QC on my single-cell data" or "Set up an RNA-seq pipeline"
 3. **Drug discovery** — "Search ~~chemical database for compounds targeting [protein]" or "Find drug targets for [disease]"
-4. **Clinical trial design** — "Help me design a clinical trial protocol for [intervention]"
-5. **Data standardization** — "Convert my instrument data to Allotrope format"
-6. **Research strategy** — "Help me evaluate a new project idea"
+4. **Data standardization** — "Convert my instrument data to Allotrope format"
+5. **Research strategy** — "Help me evaluate a new project idea"
 
 Wait for the user's response and guide them to the appropriate tools and skills.

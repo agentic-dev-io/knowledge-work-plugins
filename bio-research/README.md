@@ -2,7 +2,7 @@
 
 Connect to preclinical research tools and databases (literature search, genomics analysis, target prioritization) to accelerate early-stage life sciences R&D. Use with [Cowork](https://claude.com/product/cowork) or install directly in Claude Code.
 
-This plugin consolidates 10 MCP server integrations and 6 analysis skills into a single package for life science researchers.
+This plugin consolidates 10 MCP server integrations and 5 analysis skills into a single package for life science researchers.
 
 **New**: This plugin now includes **DuckDB** integration for high-performance genomics and research data analytics, including support for Parquet files (ideal for large datasets), vector similarity search (for research paper similarity and protein sequence analysis), and full-text search. See [DUCKDB.md](./DUCKDB.md) for details.
 
@@ -46,9 +46,6 @@ Run nf-core bioinformatics pipelines on local or public GEO/SRA sequencing data:
 - **sarek** — Germline and somatic variant calling (WGS/WES)
 - **atacseq** — Chromatin accessibility analysis
 
-#### Clinical Trial Protocol
-Generate FDA/NIH-compliant clinical trial protocols for medical devices or drugs. Includes research mode (literature + regulatory analysis) and full protocol generation with waypoint-based architecture.
-
 #### Instrument Data to Allotrope
 Convert laboratory instrument output files (PDF, CSV, Excel, TXT) to Allotrope Simple Model (ASM) format. Supports 40+ instrument types including cell counters, spectrophotometers, plate readers, qPCR, and chromatography systems.
 
@@ -78,9 +75,6 @@ Download public data from GEO/SRA, run nf-core pipelines (RNA-seq, variant calli
 
 **Drug Discovery**
 Search ~~chemical database for bioactive compounds, use ~~drug target database for target prioritization, and review clinical trial data.
-
-**Clinical Trial Design**
-Research similar trials and FDA guidance, then generate a complete protocol document with statistical analysis.
 
 **Research Strategy**
 Pitch a new idea, troubleshoot a stuck project, or evaluate strategic decisions using the scientific problem selection framework.
